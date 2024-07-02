@@ -1,0 +1,130 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.1682790619335435 0.45394316800688206 0.8749958614385799 0.8014787142047807
+  position -0.9991176718789864 -0.9811441406260891 0.6593530111230693
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Floor {
+}
+Robot {
+  translation 0 0 0.07
+  rotation 1 0 0 0
+  children [
+    DEF Body Pose {
+      children [
+        DEF body Shape {
+          appearance PBRAppearance {
+            baseColor 0.6 1 1
+          }
+          geometry Box {
+            size 0.1 0.04 0.08
+          }
+        }
+      ]
+    }
+    Display {
+      name "balance_display"
+    }
+    InertialUnit {
+      rotation 1 0 0 0
+      children [
+        Solid {
+          rotation 1 0 0 0
+          children [
+            Solid {
+              rotation 1 0 0 0
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                  }
+                  geometry Box {
+                    size 0.01 0.01 0.01
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+      name "IMU"
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor -0.065 0 -0.025
+      }
+      device [
+        DEF ps_1 PositionSensor {
+          name "ps_1"
+        }
+        RotationalMotor {
+          name "motor1"
+          maxVelocity 50
+        }
+      ]
+      endPoint Solid {
+        translation -0.06502399996441373 -5.535696479836659e-07 -0.025002478424545997
+        rotation 0.00013630469535837105 -0.9999999809654389 -0.00013960713431625065 4.717908459557025
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 1 0 1
+              baseColorMap ImageTexture {
+                url [
+                  ".balance2.jpg"
+                ]
+              }
+              roughness 1
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.02
+              radius 0.03
+            }
+          }
+        ]
+        name "left_wheel"
+        boundingObject USE wheel
+        physics DEF wheel_physics Physics {
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor 0.065 0 -0.025
+      }
+      device [
+        DEF ps_2 PositionSensor {
+          name "ps_2"
+        }
+        RotationalMotor {
+          name "motor2"
+          maxVelocity 50
+        }
+      ]
+      endPoint Solid {
+        translation 0.06502610003938754 -6.43598950492786e-06 -0.025002421497065302
+        rotation 0.0008644631990617782 -0.9999992700888837 -0.000844112005137413 4.708492027768942
+        children [
+          USE wheel
+        ]
+        name "right_wheel"
+        boundingObject USE wheel
+        physics USE wheel_physics
+      }
+    }
+  ]
+  boundingObject USE Body
+  physics Physics {
+  }
+  controller "drive_balance_IMU"
+}
